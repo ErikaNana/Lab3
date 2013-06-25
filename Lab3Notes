@@ -1,0 +1,104 @@
+Layout inflation happens when Android takes a static layout XML file and interprets it
+in a special way, turning the raw XML into part o the app's actual UI.  You won't be
+able to retrieve references to UI controls until the layout has been inflated from XML
+file.  That's why need to call setContentView first.
+
+Building Custom UI Components
+-------------------------------
+-Sometimes standard View library will not supply functionality that you need
+-therefore define your own UI components
+	-create a custom component from scratch
+	-modify an existing component
+	-combine existing components to create a compound component
+	
+This lab: using the third approach
+	-create a graphical representation of a Joke --> JokeView
+	-JokeView composed of a TextView and a RadioGroup, with two RadioButton children
+	-RadioButtons will show custom icons
+	-custom icons ---> res/drawable-*dpi
+	
+-create the State List selectors to enable use of multiple custom icons on each 
+RadioButton component
+
+State Lists
+------------
+Act as state machines
+	-provide logic for the appearance of a set of images (one at a time) on a single
+	component
+	-use them to make each RadioButton display a fully colored emote when it is selected
+	and a more faded emote when not selected
+	-example:
+		-selecting green emote will cause it to become fully colored and red faded
+		-selecting red emote will cause it to become fully colored and green faded
+	-----> use selector XML object type
+-the order of the items in the State List is important
+	-Android uses the last selector item as the default drawable resource shown if none
+	of the other items' conditions are met
+	
+Difference between padding and margins
+----------------------------------------
+http://stackoverflow.com/questions/4619899/difference-between-a-views-padding-and-margin
+
+Creating a compound component
+------------------------------
+after established layout, you want your component class to extend the class of the root
+ViewGroup in your layout (likely LinearLayout).  Then component class then becomes a special
+subclass of that ViewGroup
+
+-in this lab, custom component class is JokeView.java
+
+OnCheckedChangeListener
+------------------------
+without the OnCheckedChangeListener, joke ratings would be lost when doing other
+things on the Android such as summoning and dismissing the onscreen keyboard
+
+Adapters and AdapterViews
+----------------------------
+AdapterView = View class that allows us to bind one or more Views to a dataset
+	-this binding takes care of responding to user selections as well as populating the 
+	AdapterView with data
+Adapter
+	-performs the binding
+	-it is responsible for keeping track of the selection and supplying the AdapterView with 
+	a View object representation of each item in the dataset
+	
+In this context
+----------------
+AdapterView = scrollable vertical ViewGroup called a ListView
+dataset = ArrayList of Joke objects
+Adapter class = JokeListAdapter
+	-contains a reference to list of Joke objects and supplies ListView with a JokeView for 
+	each of them
+
+BaseAdapter
+------------
+BaseAdapter class
+	-common base class of common implementation for an Adapter that can be used in both 
+	ListView(by implementing the specialized ListAdapter interface) and spinner by 
+	implementing the specialized SpinnerAdapter interface
+	
+ListView class
+---------------
+ListView = a view group that displays a list of scrollable items
+-the list items are automatically inserted to the list using an Adapter that pulls content from
+a source such as an array or a database query and converts each item result into a view that's
+placed into the list
+-includes built in scrolling and child View management options
+	-allows control over child view selection behavior
+	
+AddJoke method
+--------------
+don't need to initialize a new JokeView and add it to the layout because Adapter now handles it
+for you
+
+
+
+
+
+
+
+
+
+
+
+		 

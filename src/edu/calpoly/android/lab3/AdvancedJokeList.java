@@ -219,8 +219,6 @@ public class AdvancedJokeList extends SherlockActivity {
 		if (!m_arrFilteredJokeList.isEmpty()) {
 			m_arrFilteredJokeList.clear();
 			this.m_jokeAdapter.notifyDataSetChanged();
-			String size = String.valueOf(m_arrFilteredJokeList.size());
-			Toast.makeText(getBaseContext(), "JokeList clearing: " + "size:  " + size, Toast.LENGTH_SHORT).show();
 		}
 		
 		switch (filter) {

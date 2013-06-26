@@ -270,17 +270,6 @@ public class AdvancedJokeList extends SherlockActivity {
 		Log.d("Lab2_JokeList", "Adding new joke:  " + joke.getJoke());
 		this.m_arrJokeList.add(joke); 
 		this.m_arrFilteredJokeList.add(joke);
-
-		
-		
-		/**		
-		 * notify m_jokeAdapter that the dataset has changed
-		 * this is the single method call that will allow changes in the Joke list to affect 
-		 * the physical JokeViews in the app
-		 * if you don't make this call after changing the dataset, the ListView will not be
-		 * updated to reflect the new state of your list of Jokes
-		*/		
-
 	}
 	
 	

@@ -91,6 +91,72 @@ AddJoke method
 don't need to initialize a new JokeView and add it to the layout because Adapter now handles it
 for you
 
+Menus
+-----
+Two different types of menus that you will work with
+	-Action Bar (replaces the Options Menu)
+	-Context Menus (replace floating Context Menus with Contextual Action Mode)
+	
+Numerous changes to menus
+	-starting with Honeycomb (API 11, Android 3.0) devices are no longer required to have
+	a physical Menu button
+	-instead, devices using Honeycomb or higher use the Action Bar to display menu options
+	using a combo of on-screen actions and overflow actions
+	
+Since developing for minimum of API 10, must consider backwards compatibility
+ActionBar class is not available in API 10 or lower, but wish to create an application that 
+looks the same across multiple versions of Android
+
+How to implement backwards-compatible menus
+-------------------------------------------
+ActionBarSherlock -> an extension of the Google compatibility solution and provides an 
+ActionBar and its features across all Android versions
+-easy, and flexible in providing a custom implementation of the Action bar if the native
+version of Android does not provide it
+-need to download ABS set up ABS as an Eclipse library project which will be referenced
+in Eclipse ANdroid app project
+
+ActionBarSherlock uses the same steps to create the Action Bar as is detailed in the
+Android Menus walkthrough (http://developer.android.com/guide/topics/ui/menus.html), 
+only using different imports
+
+Set android:showAsAction
+-------------------------
+make the menu item show up only if there is room in the menu, and to provide the title
+text for this item in the Action bar
+-this prevents the Action Bar from trying to fit too many menu items inside itself; if there
+is no room in the Action Bar for a menu item, it will be placed either in the overflow menu
+(Android 3.0 and higher) or in the options menu displayed when pressing the physical Menu
+button (Android 2.3 and lower)
+
+Toast Notifications
+--------------------
+visual feedback for debugging
+-toasts create a condensed text popup that appears briefly on screen before disappearing
+-you can create and modify Toast variables, but creating and displaying a toast all at once
+	-just use one line
+	Toast.makeText(context, text, duration).show();
+		-context = Almost always this, or context obtained via getContext(), etc
+		-text = A string to display on the screen
+		-duration = how long the Toast is displayed on the screen
+			-Toast.LENGTH_LONG, Toast.LENGTH_SHORT
+-Use a Toast notification to show minimal menu feedback as a sanity check to make sure the
+menu item responds correctly
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
 
 
 

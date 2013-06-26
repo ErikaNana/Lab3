@@ -2,13 +2,11 @@ package edu.calpoly.android.lab3;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -16,8 +14,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class AdvancedJokeList extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.SubMenu;
+
+
+public class AdvancedJokeList extends SherlockActivity {
 
 	/** Contains the name of the Author for the jokes. */
 	protected String m_strAuthorName;
@@ -55,13 +60,17 @@ public class AdvancedJokeList extends Activity {
 	 * Context-Menu MenuItem IDs.
 	 * IMPORTANT: You must use these when creating your MenuItems or the tests
 	 * used to grade your submission will fail. These are commented out for now.
+	 * These help identify which type of filter has been chosen when a user selects a SubMenu item
 	 */
-	//protected static final int FILTER = Menu.FIRST;
-	//protected static final int FILTER_LIKE = SubMenu.FIRST;
-	//protected static final int FILTER_DISLIKE = SubMenu.FIRST + 1;
-	//protected static final int FILTER_UNRATED = SubMenu.FIRST + 2;
-	//protected static final int FILTER_SHOW_ALL = SubMenu.FIRST + 3;
-
+	protected static final int FILTER = Menu.FIRST;
+	protected static final int FILTER_LIKE = SubMenu.FIRST;
+	protected static final int FILTER_DISLIKE = SubMenu.FIRST + 1;
+	protected static final int FILTER_UNRATED = SubMenu.FIRST + 2;
+	protected static final int FILTER_SHOW_ALL = SubMenu.FIRST + 3;
+	
+	//filter value
+	protected int filter = FILTER_UNRATED;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,28 +84,71 @@ public class AdvancedJokeList extends Activity {
 		this.m_nTextColor = resources.getInteger(R.color.text);
 		
 		this.m_arrJokeList = new ArrayList<Joke>(); //initialize to new instance
+		this.m_arrFilteredJokeList = new ArrayList<Joke>();
+		
 		//get array of joke strings
 		String[] joke_strings = resources.getStringArray(R.array.jokeList); 
 		
 		//set the author name
 		this.m_strAuthorName = resources.getString(R.string.author_name);
-	
-		//initialize m_jokeAdapter member variable with ArrayList of jokes
-		this.m_jokeAdapter = new JokeListAdapter(getBaseContext(), m_arrJokeList);
-		
-		//set m_vwJokeLayout's adapter to be m_jokeAdapter
-		this.m_vwJokeLayout.setAdapter(m_jokeAdapter);
 		
 		//for each of the strings in joke_strings, make call to addJoke
 		for (String joke_string : joke_strings) {
 			Joke joke = new Joke(joke_string, this.m_strAuthorName);
 			this.addJoke(joke);
 		}
+	
+		//initialize m_jokeAdapter member variable with ArrayList of jokes
+		//need to bind to m_arrFilteredJokeList
+		this.m_jokeAdapter = new JokeListAdapter(this, m_arrFilteredJokeList);
+			
+		//set m_vwJokeLayout's adapter to be m_jokeAdapter
+		this.m_vwJokeLayout.setAdapter(m_jokeAdapter);
 	}
 	
 	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		switch(item.getItemId()) {
+			//set the filter for sorting and display the appropriate jokes
+			case R.id.submenu_like:
+				filter = AdvancedJokeList.FILTER_LIKE;
+				//Toast.makeText(this,"like jokes",Toast.LENGTH_SHORT).show();
+				updateFilteredJokes(filter);			
+				this.m_jokeAdapter.notifyDataSetChanged();				
+				return true;
+
+			case R.id.submenu_dislike:
+				filter = AdvancedJokeList.FILTER_DISLIKE;
+				updateFilteredJokes(filter);			
+				this.m_jokeAdapter.notifyDataSetChanged();	
+				return true;
+				
+			case R.id.submenu_unrated:
+				filter = AdvancedJokeList.FILTER_UNRATED;
+				updateFilteredJokes(filter);			
+				this.m_jokeAdapter.notifyDataSetChanged();	
+				return true;
+				
+			case R.id.submenu_show_all:
+				filter = AdvancedJokeList.FILTER_SHOW_ALL;
+				updateFilteredJokes(filter);
+				this.m_jokeAdapter.notifyDataSetChanged();
+				return true;
+		}
+		return false;
+	};
+	/**
+	 * Create the filter menu
+	 */
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO
+		//use ABS's compatibility package
+        MenuInflater inflater = getSupportMenuInflater();
+        
+        //menu = menu to inflate to
+        inflater.inflate(R.menu.mainmenu, menu);
+        //initialize m_vwMenu
+        this.m_vwMenu = menu;
         return true;
     }
 
@@ -161,7 +213,50 @@ public class AdvancedJokeList extends Activity {
 
         });
 	}
-
+	
+	protected void updateFilteredJokes (int filter) {
+		//show only filtered jokes and clear the filtered list before starting
+		if (!m_arrFilteredJokeList.isEmpty()) {
+			m_arrFilteredJokeList.clear();
+			this.m_jokeAdapter.notifyDataSetChanged();
+			String size = String.valueOf(m_arrFilteredJokeList.size());
+			Toast.makeText(getBaseContext(), "JokeList clearing: " + "size:  " + size, Toast.LENGTH_SHORT).show();
+		}
+		
+		switch (filter) {
+			case AdvancedJokeList.FILTER_LIKE:{
+				for(Joke joke: this.m_arrJokeList) {
+					if(joke.getRating() == Joke.LIKE) {
+						this.m_arrFilteredJokeList.add(joke);
+					}
+				}
+				break;
+			}
+			case AdvancedJokeList.FILTER_DISLIKE:{
+				for(Joke joke: this.m_arrJokeList) {
+					if(joke.getRating() == Joke.DISLIKE) {
+						this.m_arrFilteredJokeList.add(joke);
+					}
+				}
+				break;
+			}
+			case AdvancedJokeList.FILTER_UNRATED:{
+				for(Joke joke: this.m_arrJokeList) {
+					if(joke.getRating() == Joke.UNRATED) {
+						this.m_arrFilteredJokeList.add(joke);
+					}
+				}
+				break;
+			}
+			case AdvancedJokeList.FILTER_SHOW_ALL:{
+				for(Joke joke: this.m_arrJokeList) {
+					this.m_arrFilteredJokeList.add(joke);
+				}
+				break;
+			}
+		}				
+	}
+	
 	/**
 	 * Method used for encapsulating the logic necessary to properly add a new
 	 * Joke to m_arrJokeList, and display it on screen.
@@ -174,15 +269,19 @@ public class AdvancedJokeList extends Activity {
 		//send message to LogCat for each Joke that is added to the Joke List
 		Log.d("Lab2_JokeList", "Adding new joke:  " + joke.getJoke());
 		this.m_arrJokeList.add(joke); 
+		this.m_arrFilteredJokeList.add(joke);
+
+		
 		
 		/**		
 		 * notify m_jokeAdapter that the dataset has changed
-		 * this is the single method call that will allow changes in teh Joke list to affect 
+		 * this is the single method call that will allow changes in the Joke list to affect 
 		 * the physical JokeViews in the app
-		 * if you don't make this call after changing teh dataset, the ListView will not be
+		 * if you don't make this call after changing the dataset, the ListView will not be
 		 * updated to reflect the new state of your list of Jokes
 		*/		
-		this.m_jokeAdapter.notifyDataSetChanged();
 
 	}
+	
+	
 }

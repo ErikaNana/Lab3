@@ -9,4 +9,5 @@ Features:
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Custom icons for like and dislike <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Scroll for jokes<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Ability to rate and filter jokes by rating
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Ability to rate jokes and filter jokes by rating <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Ability to delete jokes if a joke is long-pressed <br>

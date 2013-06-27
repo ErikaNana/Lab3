@@ -11,19 +11,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 
 
 public class AdvancedJokeList extends SherlockActivity {
-
+	
 	/** Contains the name of the Author for the jokes. */
 	protected String m_strAuthorName;
 
@@ -55,6 +59,8 @@ public class AdvancedJokeList extends SherlockActivity {
 	protected int m_nLightColor;
 
 	protected int m_nTextColor;
+
+	protected JokeView current_JokeView;
 		
 	/**
 	 * Context-Menu MenuItem IDs.
@@ -71,6 +77,100 @@ public class AdvancedJokeList extends SherlockActivity {
 	//filter value
 	protected int filter = FILTER_UNRATED;
 	
+	//implement the ActionMode.Callback
+	protected com.actionbarsherlock.view.ActionMode actionMode;
+	protected com.actionbarsherlock.view.ActionMode.Callback callback = new com.actionbarsherlock.view.ActionMode.Callback() {
+		
+		//inflate Action Menu
+		//Set Action Mode to terminate after the Remove item is selected
+		
+		/**
+		 *Called when the action mode is created; startActionMode() was called
+		 */
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			//inflate actionmenu, for the context menu items
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.actionmenu, menu);
+			return true;
+		}
+		
+		/**
+		 * Called each time the action mode is shown.  Always called after on CreateAction
+		 */
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false; //Return false if nothing is done
+		}
+		
+		/**
+		 * Called when the user selects a contextual menu item
+		 */
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			//set ListView to have an OnItemLongClickListener to trigger the firing of
+			//the Action Mode Callback
+			Toast.makeText(getBaseContext(), "in callback", Toast.LENGTH_SHORT).show();
+			switch(item.getItemId()) {
+				case R.id.menu_remove:
+					Toast.makeText(getBaseContext(), "clicked remove", Toast.LENGTH_SHORT).show();
+					
+					//find position of joke in the filtered array
+					Joke actual_joke = current_JokeView.getJoke();
+					if (m_arrFilteredJokeList.contains(actual_joke)) {
+						int position = m_arrFilteredJokeList.indexOf(actual_joke);
+						//delete the joke
+						m_arrFilteredJokeList.remove(position);
+						//notify the adapter
+						m_jokeAdapter.notifyDataSetChanged();
+						
+						//also delete it from master list
+						int positon_master = m_arrJokeList.indexOf(actual_joke);
+						m_arrJokeList.remove(positon_master);
+					}
+					mode.finish(); //Action done, so close the CAB
+					return true;
+				default:
+					return false;
+			}
+		}
+		
+		/**
+		 * Called when the user exits the action mode
+		 */
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			actionMode = null;
+			
+		}
+	};
+	
+	/**
+	 * Set ListView to have an OnItemLongClickListener
+	 */
+	protected void initLongClickListener() {
+		Toast.makeText(getBaseContext(), "in long click method", Toast.LENGTH_SHORT).show();
+		m_vwJokeLayout.requestFocus();
+		m_vwJokeLayout.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> av, View view,
+					int pos, long id) {
+				if (actionMode != null) {
+					return false;
+				}
+				Toast.makeText(getBaseContext(), "heard a long click", Toast.LENGTH_SHORT).show();
+				
+				//test
+				current_JokeView = (JokeView) view;
+/*				String joke_text = joke.getText();
+				Toast.makeText(getBaseContext(), "joke:  "  + joke_text, Toast.LENGTH_SHORT).show();*/
+
+				//Start the CAB using the ActionMode.Callback defined above
+				actionMode = startActionMode(callback);
+				return true;
+			}
+		});
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -162,6 +262,7 @@ public class AdvancedJokeList extends SherlockActivity {
 		this.m_vwJokeEditText = (EditText) findViewById(R.id.newJokeEditText);
 		this.m_vwJokeButton = (Button) findViewById(R.id.addJokeButton);
 		initAddJokeListeners();
+		initLongClickListener();
 	}
 
 	/**
@@ -177,6 +278,7 @@ public class AdvancedJokeList extends SherlockActivity {
 		
 		m_vwJokeButton.setOnClickListener(new OnClickListener() {
 			  public void onClick(View view) {
+				  Toast.makeText(getBaseContext(), "heard a click", Toast.LENGTH_SHORT).show();
 				  //retrieve text entered by user
 				  String input_text = m_vwJokeEditText.getText().toString();
 				  Joke joke = new Joke(input_text, m_strAuthorName);
@@ -269,6 +371,4 @@ public class AdvancedJokeList extends SherlockActivity {
 		this.m_arrJokeList.add(joke); 
 		this.m_arrFilteredJokeList.add(joke);
 	}
-	
-	
 }

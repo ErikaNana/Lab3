@@ -52,7 +52,6 @@ public class JokeView extends LinearLayout implements OnCheckedChangeListener{
 		this.m_vwJokeText = (TextView) findViewById(R.id.jokeTextView);
 		
 		setJoke(joke);
-		
 		//setting the OnCheckedLisneter for m_vwLikeGroup to this JokeView object
 		m_vwLikeGroup.setOnCheckedChangeListener(this);
 	}
@@ -79,16 +78,25 @@ public class JokeView extends LinearLayout implements OnCheckedChangeListener{
 
 		//setting the checked state to true on the appropriate RadioButton to reflect the
 		//rating for the new joke
-		if (joke.getRating() == Joke.LIKE) {
-			this.m_vwLikeButton.setChecked(true);
-			this.m_vwDislikeButton.setChecked(false);
-		}
-		if (joke.getRating() == Joke.DISLIKE) {
-			this.m_vwDislikeButton.setChecked(true);
-			this.m_vwLikeButton.setChecked(false);
-		}
-		else {
-			this.m_vwLikeGroup.clearCheck();
+		int rating = joke.getRating();
+		
+		switch (rating){
+			case Joke.LIKE:{
+				this.m_vwLikeButton.setChecked(true);
+				this.m_vwDislikeButton.setChecked(false);
+				break;
+			}
+			case Joke.DISLIKE:{
+				if (joke.getRating() == Joke.DISLIKE) {
+					this.m_vwDislikeButton.setChecked(true);
+					this.m_vwLikeButton.setChecked(false);
+				}
+				break;
+			}
+			case Joke.UNRATED:{
+				this.m_vwLikeGroup.clearCheck();
+				break;
+			}
 		}
 	}
 
@@ -105,6 +113,22 @@ public class JokeView extends LinearLayout implements OnCheckedChangeListener{
 			}
 		}
 		
+	}
+	
+	/**
+	 * Helper method
+	 * @return text of the joke
+	 */
+	public String getText() {
+		return m_joke.getJoke();
+	}
+	
+	/**
+	 * Helper method
+	 * @return actual joke
+	 */
+	public Joke getJoke() {
+		return m_joke;
 	}
 
 }

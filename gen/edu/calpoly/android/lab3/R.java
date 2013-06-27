@@ -961,23 +961,24 @@ containing a value of this type.
         public static final int disableHome=0x7f040009;
         public static final int dislikeButton=0x7f040038;
         public static final int edit_query=0x7f040026;
-        public static final int group_submenu=0x7f04003a;
+        public static final int group_submenu=0x7f04003b;
         public static final int homeAsUp=0x7f040006;
         public static final int jokeListViewGroup=0x7f040034;
         public static final int jokeTextView=0x7f040035;
         public static final int likeButton=0x7f040037;
         public static final int listMode=0x7f040002;
-        public static final int menu_filter=0x7f040039;
+        public static final int menu_filter=0x7f04003a;
+        public static final int menu_remove=0x7f040039;
         public static final int newJokeEditText=0x7f040033;
         public static final int normal=0x7f040001;
         public static final int ratingRadioGroup=0x7f040036;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int submenu_dislike=0x7f04003c;
-        public static final int submenu_like=0x7f04003b;
-        public static final int submenu_show_all=0x7f04003e;
-        public static final int submenu_unrated=0x7f04003d;
+        public static final int submenu_dislike=0x7f04003d;
+        public static final int submenu_like=0x7f04003c;
+        public static final int submenu_show_all=0x7f04003f;
+        public static final int submenu_unrated=0x7f04003e;
         public static final int tabMode=0x7f040003;
         public static final int useLogo=0x7f040004;
         public static final int wrap_content=0x7f040000;
@@ -1013,7 +1014,8 @@ containing a value of this type.
         public static final int sherlock_spinner_item=0x7f030018;
     }
     public static final class menu {
-        public static final int mainmenu=0x7f0c0000;
+        public static final int actionmenu=0x7f0c0000;
+        public static final int mainmenu=0x7f0c0001;
     }
     public static final class string {
         public static final int Add_Joke=0x7f090017;

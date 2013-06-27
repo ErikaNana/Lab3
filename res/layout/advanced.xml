@@ -18,12 +18,12 @@ Note: You must use the following id's for this list of UI Components defined in
     android:layout_height="match_parent"
     android:orientation="vertical">
     
-    <!--horizontal layout for the buttona and text field  -->
+    <!--horizontal layout for the button and text field  -->
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:paddingBottom= "3dp" > 
+	    android:paddingBottom= "3dp"  > 
 
 	    <Button
 	        android:id="@+id/addJokeButton"
@@ -35,7 +35,9 @@ Note: You must use the following id's for this list of UI Components defined in
 	        android:id="@+id/newJokeEditText"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:hint="@string/Enter_joke" />
+	        android:hint="@string/Enter_joke"
+	        android:nextFocusDown="@+id/jokeListViewGroup" 
+	       />
 	</LinearLayout>
 	
 	<!-- vertical layout for the jokes  -->

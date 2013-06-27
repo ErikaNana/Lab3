@@ -143,6 +143,36 @@ visual feedback for debugging
 -Use a Toast notification to show minimal menu feedback as a sanity check to make sure the
 menu item responds correctly
 
+To Delete a Joke in the List
+-----------------------------
+Can't add it as Action Bar menu item because it is not clear which Joke is implemented
+-instead
+	-create a contextual menu that appears when certain components (JokeViews) are selected
+	by the user, with a single option to remove the selected Joke from the list
+Two ways to provide Contextual Menus
+	-Floating context menus
+	-Contextual Action Mode (CAM)
+		-working with this in the lab
+		-only available on Android 3.0 or higher
+			-however, can make it work on older devices with help from ActionBarSherlock
+	-enable Contextual Action Mode for individual views
+		-ideally we would want batch contextual actions
+		-this would allow for selecting multiple JokeViews inside the ListView and marking
+		them for removal, but only enabled on API 11 and higher
+		-use Action Mode to enable a selection menu to appear whenever a JokeView is long-
+		clicked.  Long click for giving user room for error in touching small rating buttons
+		
+For the LongClickListener
+--------------------------
+Returns a boolean which specifies whether Android should continue to propagate the click event
+	-if return true, then telling Android that you handled the event and nobody else should
+	know about the long-press
+	-if return false, Android will still call other handlers
+-since long-press events typically do not perform the same action as a regular press,
+better to return true to stop event propagation
+		
+			
+
 
 
 

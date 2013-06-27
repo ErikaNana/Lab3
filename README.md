@@ -7,6 +7,6 @@ Improves the functionality of the Joke Application from Lab 2.
 
 Features:
 <br>
-  -Custom icons for like and dislike <br>
-  -Scroll for jokes<br>
-  -Ability to rate and filter jokes by rating
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Custom icons for like and dislike <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Scroll for jokes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -Ability to rate and filter jokes by rating
